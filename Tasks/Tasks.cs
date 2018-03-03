@@ -17,6 +17,7 @@ namespace Tasks
         #region Constants
 
         private string _Path = @"C:\Tasky";
+        private string _PathLastTab = @"C:\Tasky\LastTab";
         DirectoryInfo dirInfo;
         List<FileInfo> files = new List<FileInfo>();
 
@@ -27,6 +28,8 @@ namespace Tasks
         Dictionary<string, List<Tasky>> onLoadInfo;
 
         List<string[]> _completedRows = new List<string[]>();
+
+        string lastActivTabOnClose = string.Empty;
 
         #endregion
 
@@ -40,6 +43,7 @@ namespace Tasks
 
             this.menuStrip1.ForeColor = Color.FromArgb(255, 255, 255);
 
+            //Main storage path
             #region Get files or Create directory
             if ( !Directory.Exists(_Path) )
             {
@@ -54,14 +58,37 @@ namespace Tasks
             }
             #endregion
 
+            #region Open LastTab on close
+            if (!Directory.Exists(_PathLastTab))
+            {
+                //Create folder that will hold info about last active tab
+                Directory.CreateDirectory(_PathLastTab);
+                
+                var f = File.Create(_PathLastTab + @"\lastActiveTab.txt");
+                f.Close();                
+                lastActivTabOnClose = string.Empty;
+            }
+            else
+            {
+                var lastTab = Directory.GetFiles(_PathLastTab);
+                var data = File.ReadAllLines(lastTab[0]);
+                lastActivTabOnClose = data[0];
+            }
+            #endregion
+
+
             #region Loading tasks to tabControl
             if ( files.Count > 0 )
             {
                 tabControl.TabPages.Clear();
-                tabControl.Selected += TabControl_Selected;
+                tabControl.Selected += TabControl_Selected;                
 
                 onLoadInfo = taskManager.LoadTasks(tabControl, files, ref _completedRows);
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+                
+
+                //tabControl.SelectedTab = 
+                //tabControl.SelectedTab = lastActivTabOnClose;
             }
             else
             {
@@ -189,6 +216,7 @@ namespace Tasks
             try
             {
                 var tab = this.tabControl.SelectedTab.Text;
+                //var tab = lastActivTabOnClose;
 
                 var data = onLoadInfo[tab];
                 foreach ( var tasky in data )
@@ -219,8 +247,18 @@ namespace Tasks
 
         private void TasksForm_Load(object sender, EventArgs e)
         {
+            //this.tabControl.SelectedIndex = lastActivTabOnClose;
+            //this.tabControl.SelectedTab.Text = lastActivTabOnClose;
             //System.Drawing.Icon taskyIcon = new Icon(@"D:\C#\Tasks\mainicon_CHE_icon.ico");
             //this.Icon = taskyIcon;
+        }
+
+        private void TasksForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            string last = this.tabControl.SelectedTab.Text;
+            string[] lastTab = new string[1] { last.ToString() };
+
+            File.WriteAllLines(_PathLastTab + @"\lastActiveTab.txt", lastTab);
         }
     }
 }

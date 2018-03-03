@@ -58,3 +58,16 @@ G:\tasky\Tasks\Tasks\obj\Debug\Tasks.csproj.GenerateResource.Cache
 G:\tasky\Tasks\Tasks\obj\Debug\Tasks.csproj.CoreCompileInputs.cache
 G:\tasky\Tasks\Tasks\obj\Debug\Tasks.exe
 G:\tasky\Tasks\Tasks\obj\Debug\Tasks.pdb
+D:\C#\tasky\Tasks\Tasks\bin\Debug\Tasks.exe.config
+D:\C#\tasky\Tasks\Tasks\bin\Debug\Tasks.exe
+D:\C#\tasky\Tasks\Tasks\bin\Debug\Tasks.pdb
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.csprojResolveAssemblyReference.cache
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.CreateMainTask.resources
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.icons.resources
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.SubTask.resources
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.TasksForm.resources
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.Properties.Resources.resources
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.csproj.GenerateResource.Cache
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.csproj.CoreCompileInputs.cache
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.exe
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.pdb

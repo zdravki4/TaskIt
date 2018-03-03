@@ -112,6 +112,7 @@ namespace Tasks.Workers
                     }
 
                 }
+                
 
                 if ( loadInfo.Keys.Contains(tabPageName) == false )
                 {
