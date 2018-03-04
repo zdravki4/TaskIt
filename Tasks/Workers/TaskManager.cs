@@ -145,106 +145,14 @@ namespace Tasks.Workers
             var statusIndxColumn = grid.Columns.Add("status", "Status");
             grid.Columns[statusIndxColumn].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             grid.Columns[statusIndxColumn].Visible = false;
-
-            #region Old code
-            //DataGridViewTextBoxCell comboPriority = new DataGridViewTextBoxCell();
-            //comboPriority.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            //comboPriority.Name = "Priority";
-            ////comboPriority.Items.Add("High");
-            ////comboPriority.Items.Add("Medium");
-            ////comboPriority.Items.Add("Low");
-            //grid.Columns.Add(comboPriority);
-
-            //DataGridViewComboBoxColumn comboColumn = new DataGridViewComboBoxColumn();
-            //comboColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            //comboColumn.Name = "Status";
-            //comboColumn.Items.Add("In progres");
-            //comboColumn.Items.Add("done");
-            //grid.Columns.Add(comboColumn);
-            #endregion
-
+            
             grid.ColumnHeadersHeight = 35;
             grid.Dock = DockStyle.Fill;
             grid.AllowUserToAddRows = false;
             grid.BackgroundColor = Color.FromArgb(255, 255, 255);
-
-            //Addig event handler to capture combobox values changed
-            //grid.EditingControlShowing += Grid_EditingControlShowing;
-
-            //grid.CellValueChanged += Grid_CellValueChanged;
-
+            
             return grid;
-        }
-
-        #region OldCode2
-        //private void Grid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    //throw new NotImplementedException();
-
-        //    DataGridView grid = (DataGridView) sender;
-        //    var cells = grid.SelectedCells;
-
-        //    //switch ( cellContent )
-        //    //{
-        //    //    case "In progres":
-        //    //    case "done":
-        //    //        {
-        //    //            int rowIndex = cell.RowIndex;
-
-        //    //            MessageBox.Show($"{rowIndex}");
-        //    //            break;
-        //    //        }
-        //    //    default:
-        //    //        break;
-        //    //}
-
-        //}
-
-        //Part that should handle combobox value change
-        //private void Grid_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        //{
-
-        //    ComboBox cmbBox = e.Control as ComboBox;
-        //    if ( cmbBox != null )
-        //    {
-        //        //Hook event that tracks change
-        //        cmbBox.SelectionChangeCommitted -= new EventHandler(ComboBox_SelectionChangeCommitted);
-        //        cmbBox.SelectionChangeCommitted += new EventHandler(ComboBox_SelectionChangeCommitted);
-        //    }
-        //}
-
-        //Modify txt file to change the task state
-        //private void ComboBox_SelectionChangeCommitted(object sender, EventArgs e)
-        //{
-        //    DataGridViewComboBoxEditingControl ctrlBox = (DataGridViewComboBoxEditingControl) sender;
-        //    Point point =
-        //    var text = ctrlBox.Text;
-        //    //var row = sender as DataGridViewRow;
-        //    //var index = row.Selected;
-        //    //ComboBox box = sender as ComboBox;
-
-        //    switch ( text )
-        //    {
-        //        case "In progres":
-        //        case "done":
-        //            {
-        //                ComboBox box = (ComboBox) sender;
-        //                var test = box.Name;
-
-        //                MessageBox.Show($"{test}");
-        //                break;
-        //            }
-        //        default:
-        //            break;
-        //    }
-        //}
-
-        //private void ComboBox_SelectedIndexChange(object sender, EventArgs e)
-        //{
-        //    //ComboBox box = sender as ComboBox;
-        //    //MessageBox.Show($"{box.Text}");
-        //}
-        #endregion
+        }      
 
         //Create and load sub task to the grid
         public void AddNewSubtask(TabControl tabControl)

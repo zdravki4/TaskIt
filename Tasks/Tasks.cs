@@ -31,7 +31,7 @@ namespace Tasks
 
         string lastActivTabOnClose = string.Empty;
 
-        #endregion
+        #endregion 
 
         public TasksForm()
         {
@@ -261,13 +261,45 @@ namespace Tasks
             File.WriteAllLines(_PathLastTab + @"\lastActiveTab.txt", lastTab);
         }
 
+        //Shortcuts 
         private void TasksForm_KeyDown(object sender, KeyEventArgs e)
         {
+            //Create new subtask
             if (e.Modifiers == Keys.Control &&  e.KeyCode == Keys.N)
             {
                 //Add to grid
                 taskManager.AddNewSubtask(tabControl);
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+            }
+
+            //Create new Maintask
+            if (e.Control && e.Shift && e.KeyCode == Keys.N)
+            {
+                taskManager.CreateTask(tabControl);
+
+                //Updates list of files
+                files = dirInfo.GetFiles().ToList();
+            }
+
+            //Delete all Main tasks
+            if (e.Control && e.Shift && e.KeyCode == Keys.D)
+            {
+                try
+                {
+                    taskManager.DeleteAllTasks(dirInfo, tabControl);
+                    files.Clear();
+                }
+                catch (Exception)
+                {
+
+                    //throw;
+                }
+                finally
+                {
+                    lblCompleted.Text = string.Empty;
+                    lblRemaining.Text = string.Empty;
+                    dgvDoneTasks.Rows.Clear();
+                }
             }
         }
     }
