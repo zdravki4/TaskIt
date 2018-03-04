@@ -260,5 +260,15 @@ namespace Tasks
 
             File.WriteAllLines(_PathLastTab + @"\lastActiveTab.txt", lastTab);
         }
+
+        private void TasksForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control &&  e.KeyCode == Keys.N)
+            {
+                //Add to grid
+                taskManager.AddNewSubtask(tabControl);
+                taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+            }
+        }
     }
 }

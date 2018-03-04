@@ -63,7 +63,7 @@
             this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Location = new System.Drawing.Point(16, 52);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(777, 238);
@@ -76,7 +76,7 @@
             this.btnNewTask.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnNewTask.ForeColor = System.Drawing.Color.White;
             this.btnNewTask.Location = new System.Drawing.Point(16, 338);
-            this.btnNewTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnNewTask.Margin = new System.Windows.Forms.Padding(4);
             this.btnNewTask.Name = "btnNewTask";
             this.btnNewTask.Padding = new System.Windows.Forms.Padding(1);
             this.btnNewTask.Size = new System.Drawing.Size(100, 41);
@@ -92,7 +92,7 @@
             this.btnDeleteTask.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnDeleteTask.ForeColor = System.Drawing.Color.White;
             this.btnDeleteTask.Location = new System.Drawing.Point(232, 338);
-            this.btnDeleteTask.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnDeleteTask.Margin = new System.Windows.Forms.Padding(4);
             this.btnDeleteTask.Name = "btnDeleteTask";
             this.btnDeleteTask.Padding = new System.Windows.Forms.Padding(1);
             this.btnDeleteTask.Size = new System.Drawing.Size(100, 41);
@@ -157,7 +157,7 @@
             this.btnSetDone.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold);
             this.btnSetDone.ForeColor = System.Drawing.Color.White;
             this.btnSetDone.Location = new System.Drawing.Point(124, 338);
-            this.btnSetDone.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSetDone.Margin = new System.Windows.Forms.Padding(4);
             this.btnSetDone.Name = "btnSetDone";
             this.btnSetDone.Size = new System.Drawing.Size(100, 41);
             this.btnSetDone.TabIndex = 5;
@@ -178,7 +178,7 @@
             this.Priority,
             this.Status});
             this.dgvDoneTasks.Location = new System.Drawing.Point(16, 421);
-            this.dgvDoneTasks.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvDoneTasks.Margin = new System.Windows.Forms.Padding(4);
             this.dgvDoneTasks.Name = "dgvDoneTasks";
             this.dgvDoneTasks.RowHeadersVisible = false;
             this.dgvDoneTasks.Size = new System.Drawing.Size(777, 185);
@@ -312,13 +312,15 @@
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "TasksForm";
             this.Text = "TASKIfy";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TasksForm_FormClosing);
             this.Load += new System.EventHandler(this.TasksForm_Load);
             this.Shown += new System.EventHandler(this.TasksForm_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TasksForm_KeyDown);
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDoneTasks)).EndInit();
             this.menuStrip1.ResumeLayout(false);
