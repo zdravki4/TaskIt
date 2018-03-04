@@ -378,5 +378,20 @@ namespace Tasks.Workers
                 completed.Rows.Clear();
             }
         }
+
+        //Calculates the index of the last active tab that were selected before program starts closing
+        public int GetLastActiveTabOnClose(List<FileInfo> files, string lastActivTabOnClose)
+        {
+            int counter = 0;
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (files[i].Name.Contains(lastActivTabOnClose))
+                {
+                    counter = i;
+                }
+            }
+
+            return counter;
+        }
     }
 }

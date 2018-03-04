@@ -58,7 +58,7 @@ namespace Tasks
             }
             #endregion
 
-            #region Open LastTab on close
+            #region Get LastTab on close
             if (!Directory.Exists(_PathLastTab))
             {
                 //Create folder that will hold info about last active tab
@@ -76,7 +76,6 @@ namespace Tasks
             }
             #endregion
 
-
             #region Loading tasks to tabControl
             if ( files.Count > 0 )
             {
@@ -85,10 +84,6 @@ namespace Tasks
 
                 onLoadInfo = taskManager.LoadTasks(tabControl, files, ref _completedRows);
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
-                
-
-                //tabControl.SelectedTab = 
-                //tabControl.SelectedTab = lastActivTabOnClose;
             }
             else
             {
@@ -214,9 +209,11 @@ namespace Tasks
         private void TasksForm_Shown(object sender, EventArgs e)
         {
             try
-            {
+            {    
+                //Set selected index to open the same tab page, which was active on form closing
+                tabControl.SelectedIndex = taskManager.GetLastActiveTabOnClose(files, lastActivTabOnClose);
+
                 var tab = this.tabControl.SelectedTab.Text;
-                //var tab = lastActivTabOnClose;
 
                 var data = onLoadInfo[tab];
                 foreach ( var tasky in data )
@@ -232,8 +229,6 @@ namespace Tasks
             }
             catch ( Exception )
             {
-
-                //throw;
             }
         }
 
