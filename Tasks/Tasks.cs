@@ -297,5 +297,19 @@ namespace Tasks
                 }
             }
         }
+
+        private void deleteTaskCtrlDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (FileInfo f in dirInfo.GetFiles())
+            {
+                string Task = tabControl.SelectedTab.Text;
+                if (f.Name.Contains(Task))
+                {
+                    taskManager.DeleteTask(f, tabControl, tabControl.SelectedTab);
+                }
+            }
+            files = dirInfo.GetFiles().ToList();
+            taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+        }
     }
 }

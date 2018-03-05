@@ -53,6 +53,7 @@
             this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.label3 = new System.Windows.Forms.Label();
+            this.deleteTaskCtrlDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDoneTasks)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -240,6 +241,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.toolStripSeparator1,
+            this.deleteTaskCtrlDToolStripMenuItem,
             this.deleteAllToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
@@ -248,20 +250,20 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
-            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.newToolStripMenuItem.Text = "New (Ctrl+Shift+N)";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(164, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(299, 6);
             // 
             // deleteAllToolStripMenuItem
             // 
             this.deleteAllToolStripMenuItem.Name = "deleteAllToolStripMenuItem";
-            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
-            this.deleteAllToolStripMenuItem.Text = "Delete All";
+            this.deleteAllToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.deleteAllToolStripMenuItem.Text = "Delete All (Ctrl+Shift+D)";
             this.deleteAllToolStripMenuItem.Click += new System.EventHandler(this.deleteAllToolStripMenuItem_Click);
             // 
             // menuStrip1
@@ -293,6 +295,13 @@
             this.label3.TabIndex = 10;
             this.label3.Text = " ZGDS";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // deleteTaskCtrlDToolStripMenuItem
+            // 
+            this.deleteTaskCtrlDToolStripMenuItem.Name = "deleteTaskCtrlDToolStripMenuItem";
+            this.deleteTaskCtrlDToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.deleteTaskCtrlDToolStripMenuItem.Text = "Delete Task (Ctrl+D)";
+            this.deleteTaskCtrlDToolStripMenuItem.Click += new System.EventHandler(this.deleteTaskCtrlDToolStripMenuItem_Click);
             // 
             // TasksForm
             // 
@@ -354,6 +363,7 @@
         private System.Windows.Forms.ToolStripMenuItem deleteAllToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem deleteTaskCtrlDToolStripMenuItem;
     }
 }
 
