@@ -53,6 +53,12 @@
     <Compile Include="CreateMainTask.Designer.cs">
       <DependentUpon>CreateMainTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeleteSpecificTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeleteSpecificTask.Designer.cs">
+      <DependentUpon>DeleteSpecificTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -76,6 +82,9 @@
     <Compile Include="Workers\Tasky.cs" />
     <EmbeddedResource Include="CreateMainTask.resx">
       <DependentUpon>CreateMainTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeleteSpecificTask.resx">
+      <DependentUpon>DeleteSpecificTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="icons.resx">
       <Generator>ResXFileCodeGenerator</Generator>

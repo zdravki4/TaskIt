@@ -296,6 +296,11 @@ namespace Tasks
                     dgvDoneTasks.Rows.Clear();
                 }
             }
+
+            if (e.Alt && e.KeyCode == Keys.F4)
+            {
+                this.Close();
+            }
         }
 
         private void deleteTaskCtrlDToolStripMenuItem_Click(object sender, EventArgs e)
