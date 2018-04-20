@@ -37,6 +37,8 @@ namespace Tasks
         {
             InitializeComponent();
 
+            this.MinimumSize = new Size(650, 450);
+
             //Hooks a menu strip to Tab Control
             this.tabControl.MouseClick += new MouseEventHandler(tabControl_MouseClick);
             tabControl.Font = new Font("Verdana", 11);
@@ -45,7 +47,7 @@ namespace Tasks
 
             //Main storage path
             #region Get files or Create directory
-            if ( !Directory.Exists(_Path) )
+            if (!Directory.Exists(_Path))
             {
                 //Create initial Taks file
                 Directory.CreateDirectory(_Path);
@@ -63,9 +65,9 @@ namespace Tasks
             {
                 //Create folder that will hold info about last active tab
                 Directory.CreateDirectory(_PathLastTab);
-                
+
                 var f = File.Create(_PathLastTab + @"\lastActiveTab.txt");
-                f.Close();                
+                f.Close();
                 lastActivTabOnClose = string.Empty;
             }
             else
@@ -77,12 +79,12 @@ namespace Tasks
             #endregion
 
             #region Loading tasks to tabControl
-            if ( files.Count > 0 )
+            if (files.Count > 0)
             {
                 tabControl.TabPages.Clear();
-                tabControl.Selected += TabControl_Selected;                
+                tabControl.Selected += TabControl_Selected;
 
-                onLoadInfo = taskManager.LoadTasks(tabControl, files, ref _completedRows);
+                onLoadInfo = taskManager.LoadTasks(tabControl, files, ref _completedRows, this.contextMenuStrip2);
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
             }
             else
@@ -102,16 +104,16 @@ namespace Tasks
 
         private void tabControl_MouseClick(object sender, MouseEventArgs e)
         {
-            if ( e.Button == MouseButtons.Right )
+            if (e.Button == MouseButtons.Right)
             {
                 this.contextMenuStrip1.Show(this.tabControl, e.Location);
 
                 //Getting the tabpage that was clicked by mouse right click
-                for ( int i = 0; i < tabControl.TabCount; i++ )
+                for (int i = 0; i < tabControl.TabCount; i++)
                 {
-                    if ( tabControl.GetTabRect(i).Contains(e.Location) )
+                    if (tabControl.GetTabRect(i).Contains(e.Location))
                     {
-                        _rightClickedTabPage = (TabPage) tabControl.Controls[i];
+                        _rightClickedTabPage = (TabPage)tabControl.Controls[i];
                     }
                 }
             }
@@ -134,7 +136,7 @@ namespace Tasks
                 taskManager.DeleteAllTasks(dirInfo, tabControl);
                 files.Clear();
             }
-            catch ( Exception )
+            catch (Exception)
             {
 
                 //throw;
@@ -149,10 +151,11 @@ namespace Tasks
 
         private void deleteTaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach ( FileInfo f in dirInfo.GetFiles() )
+
+            foreach (FileInfo f in dirInfo.GetFiles())
             {
                 string Task = _rightClickedTabPage.Text;
-                if ( f.Name.Contains(Task) )
+                if (Path.GetFileNameWithoutExtension(f.Name).Equals(Task))
                 {
                     taskManager.DeleteTask(f, tabControl, _rightClickedTabPage);
                 }
@@ -168,7 +171,7 @@ namespace Tasks
                 taskManager.DeleteAllTasks(dirInfo, tabControl);
                 files.Clear();
             }
-            catch ( Exception )
+            catch (Exception)
             {
 
                 //throw;
@@ -209,16 +212,16 @@ namespace Tasks
         private void TasksForm_Shown(object sender, EventArgs e)
         {
             try
-            {    
+            {
                 //Set selected index to open the same tab page, which was active on form closing
                 tabControl.SelectedIndex = taskManager.GetLastActiveTabOnClose(files, lastActivTabOnClose);
 
                 var tab = this.tabControl.SelectedTab.Text;
 
                 var data = onLoadInfo[tab];
-                foreach ( var tasky in data )
+                foreach (var tasky in data)
                 {
-                    if ( tasky.Status == false )
+                    if (tasky.Status == false)
                     {
                         var taskyToRowData = tasky.ToString().Split(';');
                         dgvDoneTasks.Rows.Add(taskyToRowData);
@@ -227,7 +230,7 @@ namespace Tasks
 
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
             }
-            catch ( Exception )
+            catch (Exception)
             {
             }
         }
@@ -260,7 +263,7 @@ namespace Tasks
         private void TasksForm_KeyDown(object sender, KeyEventArgs e)
         {
             //Create new subtask
-            if (e.Modifiers == Keys.Control &&  e.KeyCode == Keys.N)
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.N)
             {
                 //Add to grid
                 taskManager.AddNewSubtask(tabControl);
@@ -305,16 +308,52 @@ namespace Tasks
 
         private void deleteTaskCtrlDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (FileInfo f in dirInfo.GetFiles())
-            {
-                string Task = tabControl.SelectedTab.Text;
-                if (f.Name.Contains(Task))
-                {
-                    taskManager.DeleteTask(f, tabControl, tabControl.SelectedTab);
-                }
-            }
+            _rightClickedTabPage = (TabPage)tabControl.SelectedTab;
+            string Task = tabControl.SelectedTab.Text;
+
+            var file = dirInfo.GetFiles().Where(f => Path.GetFileNameWithoutExtension(f.Name) == Task).First();
+
+            taskManager.DeleteTask(file, tabControl, _rightClickedTabPage);
+
             files = dirInfo.GetFiles().ToList();
             taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
         }
+
+        private void btnClearHistory_Click(object sender, EventArgs e)
+        {
+            dgvDoneTasks.Rows.Clear();
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Test");
+            var grid = tabControl.SelectedTab.Controls.OfType<DataGridView>().First();
+            int rowIndex = grid.SelectedRows[0].Index;
+
+            grid.Rows[rowIndex].DefaultCellStyle.BackColor = Color.FromArgb(86, 248, 0);
+            grid.ClearSelection();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Test");
+            var grid = tabControl.SelectedTab.Controls.OfType<DataGridView>().First();
+            int rowIndex = grid.SelectedRows[0].Index;
+
+            grid.Rows[rowIndex].DefaultCellStyle.BackColor = Color.White;
+            grid.ClearSelection();
+        }
+
+        //private void tabControl_Selected_1(object sender, TabControlEventArgs e)
+        //{
+        //    //MessageBox.Show("Test");
+        //    //tabControl.SelectedTab.BackColor = Color.Aqua;
+        //    tabControl.TabPages[tabControl.SelectedIndex].BackColor = Color.Aqua;
+        //}
     }
 }

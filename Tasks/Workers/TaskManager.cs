@@ -11,6 +11,11 @@ namespace Tasks.Workers
 {
     public class TaskManager
     {
+        int _rowIndex;
+        DataGridView _activeGrid = new DataGridView();
+
+        private ContextMenuStrip _contextMenu2;
+
         //Delete all Tasks
         public void DeleteAllTasks(DirectoryInfo dir, TabControl tabControl)
         {
@@ -65,8 +70,10 @@ namespace Tasks.Workers
         }
 
         //Loads existing task to the program on startup
-        public Dictionary<string, List<Tasky>> LoadTasks(TabControl tabControl, List<FileInfo> files, ref List<string[]> completedRows)
+        public Dictionary<string, List<Tasky>> LoadTasks(TabControl tabControl, List<FileInfo> files, ref List<string[]> completedRows, ContextMenuStrip contextMenu2)
         {
+            _contextMenu2 = contextMenu2;
+
             Dictionary<string, List<Tasky>> loadInfo = new Dictionary<string, List<Tasky>>();
 
             for ( int i = 0; i < files.Count; i++ )
@@ -111,9 +118,15 @@ namespace Tasks.Workers
                         completedRows.Add(row);
                     }
 
-                }
-                
+                    foreach (DataGridViewRow dgvRow in grid.Rows)
+                    {
+                        dgvRow.ContextMenuStrip = _contextMenu2;
+                    }
 
+                }
+
+                grid.ClearSelection();
+                
                 if ( loadInfo.Keys.Contains(tabPageName) == false )
                 {
                     loadInfo.Add(tabPageName, taskyies);
@@ -127,11 +140,12 @@ namespace Tasks.Workers
         private DataGridView MakeGrid()
         {
             DataGridView grid = new DataGridView();
-
+            
             grid.RowHeadersVisible = false;
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
             grid.AutoResizeRows();
+
             grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grid.EditMode = DataGridViewEditMode.EditProgrammatically;
 
@@ -150,10 +164,21 @@ namespace Tasks.Workers
             grid.Dock = DockStyle.Fill;
             grid.AllowUserToAddRows = false;
             grid.BackgroundColor = Color.FromArgb(255, 255, 255);
-            
-            return grid;
-        }      
 
+            return grid;
+        }
+        
+        //Displaying right-click datagridview row contextstrip menu
+        private void DGV_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var grid = (DataGridView)sender;
+
+                grid.Rows[e.RowIndex].ContextMenuStrip.Show(grid /*grid.Rows[e.RowIndex]*/, e.Location, ToolStripDropDownDirection.BelowRight);
+            }
+        }
+        
         //Create and load sub task to the grid
         public void AddNewSubtask(TabControl tabControl)
         {

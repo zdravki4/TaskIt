@@ -50,18 +50,24 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteTaskCtrlDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.label3 = new System.Windows.Forms.Label();
-            this.deleteTaskCtrlDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnClearHistory = new System.Windows.Forms.Button();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDoneTasks)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Location = new System.Drawing.Point(16, 52);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4);
@@ -72,6 +78,7 @@
             // 
             // btnNewTask
             // 
+            this.btnNewTask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnNewTask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
             this.btnNewTask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNewTask.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -88,6 +95,7 @@
             // 
             // btnDeleteTask
             // 
+            this.btnDeleteTask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDeleteTask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
             this.btnDeleteTask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteTask.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -141,6 +149,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
@@ -153,6 +162,7 @@
             // 
             // btnSetDone
             // 
+            this.btnSetDone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSetDone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
             this.btnSetDone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetDone.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold);
@@ -169,8 +179,7 @@
             // dgvDoneTasks
             // 
             this.dgvDoneTasks.AllowUserToAddRows = false;
-            this.dgvDoneTasks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgvDoneTasks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvDoneTasks.BackgroundColor = System.Drawing.Color.White;
             this.dgvDoneTasks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -182,7 +191,7 @@
             this.dgvDoneTasks.Margin = new System.Windows.Forms.Padding(4);
             this.dgvDoneTasks.Name = "dgvDoneTasks";
             this.dgvDoneTasks.RowHeadersVisible = false;
-            this.dgvDoneTasks.Size = new System.Drawing.Size(777, 185);
+            this.dgvDoneTasks.Size = new System.Drawing.Size(777, 166);
             this.dgvDoneTasks.TabIndex = 6;
             // 
             // Column1
@@ -206,6 +215,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
@@ -218,6 +228,7 @@
             // 
             // lblRemaining
             // 
+            this.lblRemaining.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblRemaining.AutoSize = true;
             this.lblRemaining.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblRemaining.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
@@ -228,6 +239,7 @@
             // 
             // lblCompleted
             // 
+            this.lblCompleted.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblCompleted.AutoSize = true;
             this.lblCompleted.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblCompleted.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
@@ -259,6 +271,13 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(299, 6);
             // 
+            // deleteTaskCtrlDToolStripMenuItem
+            // 
+            this.deleteTaskCtrlDToolStripMenuItem.Name = "deleteTaskCtrlDToolStripMenuItem";
+            this.deleteTaskCtrlDToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
+            this.deleteTaskCtrlDToolStripMenuItem.Text = "Delete Task (Ctrl+D)";
+            this.deleteTaskCtrlDToolStripMenuItem.Click += new System.EventHandler(this.deleteTaskCtrlDToolStripMenuItem_Click);
+            // 
             // deleteAllToolStripMenuItem
             // 
             this.deleteAllToolStripMenuItem.Name = "deleteAllToolStripMenuItem";
@@ -280,6 +299,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(809, 32);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // label3
             // 
@@ -296,19 +316,53 @@
             this.label3.Text = " ZGDS";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // deleteTaskCtrlDToolStripMenuItem
+            // btnClearHistory
             // 
-            this.deleteTaskCtrlDToolStripMenuItem.Name = "deleteTaskCtrlDToolStripMenuItem";
-            this.deleteTaskCtrlDToolStripMenuItem.Size = new System.Drawing.Size(302, 26);
-            this.deleteTaskCtrlDToolStripMenuItem.Text = "Delete Task (Ctrl+D)";
-            this.deleteTaskCtrlDToolStripMenuItem.Click += new System.EventHandler(this.deleteTaskCtrlDToolStripMenuItem_Click);
+            this.btnClearHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearHistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
+            this.btnClearHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClearHistory.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnClearHistory.ForeColor = System.Drawing.Color.White;
+            this.btnClearHistory.Location = new System.Drawing.Point(645, 338);
+            this.btnClearHistory.Margin = new System.Windows.Forms.Padding(4);
+            this.btnClearHistory.Name = "btnClearHistory";
+            this.btnClearHistory.Padding = new System.Windows.Forms.Padding(1);
+            this.btnClearHistory.Size = new System.Drawing.Size(148, 41);
+            this.btnClearHistory.TabIndex = 11;
+            this.btnClearHistory.Text = "Clear History";
+            this.btnClearHistory.UseVisualStyleBackColor = false;
+            this.btnClearHistory.Click += new System.EventHandler(this.btnClearHistory_Click);
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(211, 80);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItem1.Text = "Mark as Current";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItem2.Text = "Unmark";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // TasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(809, 620);
+            this.ClientSize = new System.Drawing.Size(809, 601);
+            this.Controls.Add(this.btnClearHistory);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lblCompleted);
             this.Controls.Add(this.lblRemaining);
@@ -334,6 +388,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvDoneTasks)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -364,6 +419,10 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolStripMenuItem deleteTaskCtrlDToolStripMenuItem;
+        private System.Windows.Forms.Button btnClearHistory;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 

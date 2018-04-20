@@ -16,5 +16,10 @@ namespace Tasks
         {
             InitializeComponent();
         }
+
+        private void DeleteSpecificTask_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
