@@ -165,12 +165,14 @@ namespace Tasks.Workers
                 case "toolStripMenuItem1":
                     {
                         hittedRow.DefaultCellStyle.BackColor = Color.Red;
+                        _activeGrid.ClearSelection();
                     }
                     break;
 
                 case "toolStripMenuItem2":
                     {
-                        hittedRow.DefaultCellStyle.BackColor = Color.White; ;
+                        hittedRow.DefaultCellStyle.BackColor = Color.White;
+                        _activeGrid.ClearSelection();
                     }
                     break;
                 default:
@@ -313,6 +315,7 @@ namespace Tasks.Workers
 
                 //Send to Completed
                 completed.Rows.Add(row);
+                completed.ClearSelection();
 
                 //set to done in txt file and in dictionary or reload dictionary (new method)
 

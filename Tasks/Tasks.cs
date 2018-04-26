@@ -103,6 +103,8 @@ namespace Tasks
 
             taskManager.UpdateCompletedOnTabChange(this.dgvDoneTasks, currentPage, onLoadInfo);
             taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+
+            dgvDoneTasks.ClearSelection();
         }
 
         private void tabControl_MouseClick(object sender, MouseEventArgs e)
