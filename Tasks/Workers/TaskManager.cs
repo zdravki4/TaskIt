@@ -11,10 +11,16 @@ namespace Tasks.Workers
 {
     public class TaskManager
     {
-        int _rowIndex;
-        DataGridView _activeGrid = new DataGridView();
-
+        static int _rowIndex;
+        Point dgvMouseDown;
+        static DataGridView _activeGrid = new DataGridView();
         private ContextMenuStrip _contextMenu2;
+
+        public TaskManager(ContextMenuStrip contextMenu2)
+        {
+            _contextMenu2 = contextMenu2;
+            _contextMenu2.ItemClicked += ToolStripMenu2_ItemClicked;
+        }
 
         //Delete all Tasks
         public void DeleteAllTasks(DirectoryInfo dir, TabControl tabControl)
@@ -37,7 +43,7 @@ namespace Tasks.Workers
 
         //Create task
         public void CreateTask(TabControl tabControl)
-        {
+        {                
             bool isCreatedToPath;
             string task;
 
@@ -62,18 +68,31 @@ namespace Tasks.Workers
                     tabControl.TabPages.Insert(0, newPage);
 
                     var grid = MakeGrid();
+                    grid.MouseDown += DataGridView_MouseDownClick;
+                    
                     newPage.Controls.Add(grid);
 
                     tabControl.SelectedIndex = 0;
+
+                    grid.ClearSelection();
                 }
             }
         }
+        
+        private void DataGridView_MouseDownClick(object sender, MouseEventArgs e)
+        {
+            dgvMouseDown = e.Location;
+            DataGridView dgv = (DataGridView)sender;
+            _activeGrid = dgv;
+            var hit = dgv.HitTest(e.X, e.Y);
+
+            _rowIndex = hit.RowIndex;            
+        }
 
         //Loads existing task to the program on startup
-        public Dictionary<string, List<Tasky>> LoadTasks(TabControl tabControl, List<FileInfo> files, ref List<string[]> completedRows, ContextMenuStrip contextMenu2)
+        public Dictionary<string, List<Tasky>> LoadTasks(TabControl tabControl, List<FileInfo> files, ref List<string[]> completedRows)
         {
-            _contextMenu2 = contextMenu2;
-
+            //_contextMenu2.ItemClicked += ToolStripMenu2_ItemClicked;
             Dictionary<string, List<Tasky>> loadInfo = new Dictionary<string, List<Tasky>>();
 
             for ( int i = 0; i < files.Count; i++ )
@@ -84,6 +103,7 @@ namespace Tasks.Workers
                 tabControl.TabPages.Add(Path.GetFileNameWithoutExtension(files[i].Name));
 
                 var grid = MakeGrid();
+                grid.MouseDown += DataGridView_MouseDownClick;
 
                 tabControl.TabPages[i].Controls.Add(grid);
 
@@ -95,8 +115,6 @@ namespace Tasks.Workers
 
                     Workers.Tasky restoreTasky = new Tasky(rowInfo);
                     taskyies.Add(restoreTasky);
-
-                    //DataGridViewRow row = new DataGridViewRow();
 
                     string[] row = new string[3] { restoreTasky.SubTaskName, restoreTasky.Priority, restoreTasky.Status == true ? "In progres" : "Done" };
                     #region Odl
@@ -136,6 +154,30 @@ namespace Tasks.Workers
             return loadInfo;
         }
 
+        private void ToolStripMenu2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            var strip = ((ToolStrip)sender).Parent;
+            ToolStripItem choice = e.ClickedItem;
+
+            DataGridViewRow hittedRow = _activeGrid.Rows[_rowIndex];
+            switch (choice.Name)
+            {
+                case "toolStripMenuItem1":
+                    {
+                        hittedRow.DefaultCellStyle.BackColor = Color.Red;
+                    }
+                    break;
+
+                case "toolStripMenuItem2":
+                    {
+                        hittedRow.DefaultCellStyle.BackColor = Color.White; ;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         //Creates datagridview
         private DataGridView MakeGrid()
         {
@@ -166,18 +208,7 @@ namespace Tasks.Workers
             grid.BackgroundColor = Color.FromArgb(255, 255, 255);
 
             return grid;
-        }
-        
-        //Displaying right-click datagridview row contextstrip menu
-        private void DGV_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var grid = (DataGridView)sender;
-
-                grid.Rows[e.RowIndex].ContextMenuStrip.Show(grid /*grid.Rows[e.RowIndex]*/, e.Location, ToolStripDropDownDirection.BelowRight);
-            }
-        }
+        }      
         
         //Create and load sub task to the grid
         public void AddNewSubtask(TabControl tabControl)
@@ -205,11 +236,12 @@ namespace Tasks.Workers
                     newTasky.Status = true; /*default value*/
 
                     DataGridViewRow row = new DataGridViewRow();
+                    row.ContextMenuStrip = _contextMenu2;
                     int rowIndex = grid.Rows.Add(row);
 
                     grid.Rows[rowIndex].Cells[0].Value = newTasky.SubTaskName;
-                    grid.Rows[rowIndex].Cells[1].Value = /*new DataGridViewComboBoxCell().Value =*/ newTasky.Priority;
-                    grid.Rows[rowIndex].Cells[2].Value = /*new DataGridViewComboBoxCell().Value =*/ newTasky.Status /*== true ? "In progres" : "Done"*/;
+                    grid.Rows[rowIndex].Cells[1].Value =  String.IsNullOrEmpty(newTasky.Priority) ? "Low" : newTasky.Priority;
+                    grid.Rows[rowIndex].Cells[2].Value =  newTasky.Status ;
 
                     //Save to file
                     var taskyRecord = newTasky.ToString();

@@ -21,7 +21,7 @@ namespace Tasks
         DirectoryInfo dirInfo;
         List<FileInfo> files = new List<FileInfo>();
 
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager;
 
         TabPage _rightClickedTabPage;
 
@@ -31,6 +31,7 @@ namespace Tasks
 
         string lastActivTabOnClose = string.Empty;
 
+        int _rightClickedRow;
         #endregion 
 
         public TasksForm()
@@ -38,12 +39,13 @@ namespace Tasks
             InitializeComponent();
 
             this.MinimumSize = new Size(650, 450);
-
+            
             //Hooks a menu strip to Tab Control
             this.tabControl.MouseClick += new MouseEventHandler(tabControl_MouseClick);
             tabControl.Font = new Font("Verdana", 11);
 
             this.menuStrip1.ForeColor = Color.FromArgb(255, 255, 255);
+            taskManager = new TaskManager(this.contextMenuStrip2);
 
             //Main storage path
             #region Get files or Create directory
@@ -84,7 +86,7 @@ namespace Tasks
                 tabControl.TabPages.Clear();
                 tabControl.Selected += TabControl_Selected;
 
-                onLoadInfo = taskManager.LoadTasks(tabControl, files, ref _completedRows, this.contextMenuStrip2);
+                onLoadInfo = taskManager.LoadTasks(tabControl, files, ref _completedRows);
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
             }
             else
@@ -93,10 +95,11 @@ namespace Tasks
             }
             #endregion
         }
-
+       
         private void TabControl_Selected(object sender, TabControlEventArgs e)
         {
             TabPage currentPage = e.TabPage;
+            currentPage.Controls.OfType<DataGridView>().First().ClearSelection();
 
             taskManager.UpdateCompletedOnTabChange(this.dgvDoneTasks, currentPage, onLoadInfo);
             taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
@@ -245,10 +248,6 @@ namespace Tasks
 
         private void TasksForm_Load(object sender, EventArgs e)
         {
-            //this.tabControl.SelectedIndex = lastActivTabOnClose;
-            //this.tabControl.SelectedTab.Text = lastActivTabOnClose;
-            //System.Drawing.Icon taskyIcon = new Icon(@"D:\C#\Tasks\mainicon_CHE_icon.ico");
-            //this.Icon = taskyIcon;
         }
 
         private void TasksForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -329,31 +328,6 @@ namespace Tasks
 
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Test");
-            var grid = tabControl.SelectedTab.Controls.OfType<DataGridView>().First();
-            int rowIndex = grid.SelectedRows[0].Index;
-
-            grid.Rows[rowIndex].DefaultCellStyle.BackColor = Color.FromArgb(86, 248, 0);
-            grid.ClearSelection();
-        }
-
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Test");
-            var grid = tabControl.SelectedTab.Controls.OfType<DataGridView>().First();
-            int rowIndex = grid.SelectedRows[0].Index;
-
-            grid.Rows[rowIndex].DefaultCellStyle.BackColor = Color.White;
-            grid.ClearSelection();
-        }
-
-        //private void tabControl_Selected_1(object sender, TabControlEventArgs e)
-        //{
-        //    //MessageBox.Show("Test");
-        //    //tabControl.SelectedTab.BackColor = Color.Aqua;
-        //    tabControl.TabPages[tabControl.SelectedIndex].BackColor = Color.Aqua;
-        //}
+        
     }
 }
