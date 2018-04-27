@@ -282,7 +282,7 @@ namespace Tasks.Workers
             grid.Rows.RemoveAt(indx);
 
             grid.Update();
-
+            grid.ClearSelection();
             //Remove subtask from file
             int indexToDelete;
             for ( int i = 0; i < lines.Count; i++ )
@@ -308,6 +308,7 @@ namespace Tasks.Workers
 
                 var indx = grid.SelectedCells[0].RowIndex;
                 var row = grid.Rows[indx];
+                row.DefaultCellStyle.BackColor = Color.White;
                 row.Cells[2].Value = false.ToString();
 
                 //Update grid ongoing tasks

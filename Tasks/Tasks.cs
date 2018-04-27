@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Tasks.Menus;
 using Tasks.Workers;
 
 namespace Tasks
@@ -210,8 +211,8 @@ namespace Tasks
             taskManager.DeleteSubTask(tabControl);
 
             taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
-            //TODO delete from txt file
 
+            
         }
 
         private void TasksForm_Shown(object sender, EventArgs e)
@@ -330,6 +331,24 @@ namespace Tasks
 
         }
 
-        
+        private void label3_Click(object sender, EventArgs e)
+        {
+            using (AuthorInfo info = new AuthorInfo())
+            {
+                info.KeyDown += OnEscape_KeyDown;
+                //info.
+                info.ShowDialog();
+            }
+        }
+
+        private void OnEscape_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                ((AuthorInfo)sender).Close();
+            }
+
+    
+        }
     }
 }

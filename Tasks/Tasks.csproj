@@ -64,6 +64,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>icons.resx</DependentUpon>
     </Compile>
+    <Compile Include="Menus\AuthorInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menus\AuthorInfo.Designer.cs">
+      <DependentUpon>AuthorInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="SubTask.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +95,9 @@
     <EmbeddedResource Include="icons.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menus\AuthorInfo.resx">
+      <DependentUpon>AuthorInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubTask.resx">
       <DependentUpon>SubTask.cs</DependentUpon>

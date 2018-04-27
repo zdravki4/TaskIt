@@ -72,3 +72,4 @@ D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.csproj.CoreCompileInputs.cache
 D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.exe
 D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.pdb
 D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.DeleteSpecificTask.resources
+D:\C#\tasky\Tasks\Tasks\obj\Debug\Tasks.Menus.AuthorInfo.resources
