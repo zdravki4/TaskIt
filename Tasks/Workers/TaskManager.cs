@@ -175,6 +175,42 @@ namespace Tasks.Workers
                         _activeGrid.ClearSelection();
                     }
                     break;
+                case "toolStripMenuItem3":
+                    {
+                        // Delete from grid
+                        var grid = _activeGrid;
+                        var pathToTask = PathToTaskProject((TabPage)_activeGrid.Parent);
+
+                        List<string> lines = File.ReadAllLines(pathToTask).ToList();
+                        string search = string.Empty;
+                        //Remove subtask from file
+                        int indexToDelete;
+                        for (int i = 0; i < lines.Count; i++)
+                        {
+                            if (lines[i].Contains(search))
+                            {
+                                indexToDelete = i;
+                                lines.RemoveAt(indexToDelete);
+                            }
+                        }
+
+                        File.WriteAllLines(pathToTask, lines.ToArray());
+
+
+                        var cells = grid.Rows[_rowIndex].Cells;
+                        //int indx = cells[0].RowIndex;
+
+                        search = grid.Rows[_rowIndex].Cells[0].Value.ToString();
+                        grid.Rows.RemoveAt(_rowIndex);
+
+                        grid.Update();
+                        grid.ClearSelection();
+
+                        
+
+                        //UpdateLabels(dgvDoneTasks, (TabControl)_activeGrid.Parent.Parent, lblRemaining, lblCompleted);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -184,7 +220,8 @@ namespace Tasks.Workers
         private DataGridView MakeGrid()
         {
             DataGridView grid = new DataGridView();
-            
+            grid.RowsRemoved += OnRow_Removed;
+
             grid.RowHeadersVisible = false;
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
@@ -210,8 +247,20 @@ namespace Tasks.Workers
             grid.BackgroundColor = Color.FromArgb(255, 255, 255);
 
             return grid;
-        }      
-        
+        }
+
+        private void OnRow_Removed(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            var mainControl = ((DataGridView)sender).Parent.Parent.Parent;
+            Label remaining = mainControl.Controls.OfType<Label>().Where(p => p.Name == "lblRemaining").First();
+            var oldValue = Int32.Parse(remaining.Text);
+            remaining.Text = (oldValue - 1).ToString();
+
+            Label completedTasks = mainControl.Controls.OfType<Label>().Where(p => p.Name == "lblCompleted").First();
+            var oldValueCompleted = Int32.Parse(completedTasks.Text);
+            completedTasks.Text = (oldValueCompleted + 1).ToString();
+        }
+
         //Create and load sub task to the grid
         public void AddNewSubtask(TabControl tabControl)
         {

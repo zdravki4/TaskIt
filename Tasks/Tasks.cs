@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Tasks.Menus;
 using Tasks.Workers;
+using Tasks.Properties;
 
 namespace Tasks
 {
@@ -210,7 +211,7 @@ namespace Tasks
             // Delete from grid
             taskManager.DeleteSubTask(tabControl);
 
-            taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+            //taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
 
             
         }
@@ -220,8 +221,7 @@ namespace Tasks
             try
             {
                 //Set selected index to open the same tab page, which was active on form closing
-                tabControl.SelectedIndex = taskManager.GetLastActiveTabOnClose(files, lastActivTabOnClose);
-
+                tabControl.SelectedIndex = (int)Settings.Default["LastActiveTabPageIndex"];
                 var tab = this.tabControl.SelectedTab.Text;
 
                 var data = onLoadInfo[tab];
@@ -255,10 +255,9 @@ namespace Tasks
 
         private void TasksForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            string last = this.tabControl.SelectedTab.Text;
-            string[] lastTab = new string[1] { last.ToString() };
+            Settings.Default["LastActiveTabPageIndex"] = this.tabControl.SelectedIndex;
+            Settings.Default.Save();
 
-            File.WriteAllLines(_PathLastTab + @"\lastActiveTab.txt", lastTab);
         }
 
         //Shortcuts 
