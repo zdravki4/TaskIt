@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Tasks.Properties;
 
 namespace Tasks.Workers
 {
@@ -15,18 +16,23 @@ namespace Tasks.Workers
         Point dgvMouseDown;
         static DataGridView _activeGrid = new DataGridView();
         private ContextMenuStrip _contextMenu2;
+        private static Color rowsForeGroundColor;
+        private Dictionary<string, List<Tasky>> _onLoadInfo;
+        private DataGridView _completed;
 
-        public TaskManager(ContextMenuStrip contextMenu2)
+        public TaskManager(ContextMenuStrip contextMenu2, ref Dictionary<string, List<Tasky>> onLoadInfo, DataGridView completed)
         {
             _contextMenu2 = contextMenu2;
             _contextMenu2.ItemClicked += ToolStripMenu2_ItemClicked;
+            _onLoadInfo = onLoadInfo;
+            _completed = completed;
         }
 
         //Delete all Tasks
         public void DeleteAllTasks(DirectoryInfo dir, TabControl tabControl)
         {
             var filesToDelete = dir.GetFiles();
-            foreach ( FileInfo file in filesToDelete )
+            foreach (FileInfo file in filesToDelete)
             {
                 file.Delete();
 
@@ -43,33 +49,38 @@ namespace Tasks.Workers
 
         //Create task
         public void CreateTask(TabControl tabControl)
-        {                
+        {
             bool isCreatedToPath;
             string task;
 
-            using ( CreateMainTask newTaskProject = new CreateMainTask() )
+            using (CreateMainTask newTaskProject = new CreateMainTask())
             {
                 newTaskProject.StartPosition = FormStartPosition.CenterScreen;
                 newTaskProject.CancelButton = newTaskProject.btnCancel;
                 newTaskProject.AcceptButton = newTaskProject.btnCreate;
                 newTaskProject.Width = 320;
                 newTaskProject.Height = 130;
+                newTaskProject.btnCancel.BackColor = (Color)Settings.Default["ThemeColor"];
+                newTaskProject.btnCreate.BackColor = (Color)Settings.Default["ThemeColor"];
                 newTaskProject.ShowDialog();
+
+
 
                 isCreatedToPath = newTaskProject.isTaskCreated;
                 task = newTaskProject.TaskName;
 
-                if ( isCreatedToPath )
+                if (isCreatedToPath)
                 {
                     string tabPageName = Path.GetFileNameWithoutExtension(task);
 
                     TabPage newPage = new TabPage(tabPageName);
 
                     tabControl.TabPages.Insert(0, newPage);
+                    //tabControl.TabPages.Add(newPage);
 
                     var grid = MakeGrid();
                     grid.MouseDown += DataGridView_MouseDownClick;
-                    
+
                     newPage.Controls.Add(grid);
 
                     tabControl.SelectedIndex = 0;
@@ -78,7 +89,7 @@ namespace Tasks.Workers
                 }
             }
         }
-        
+
         private void DataGridView_MouseDownClick(object sender, MouseEventArgs e)
         {
             dgvMouseDown = e.Location;
@@ -86,7 +97,7 @@ namespace Tasks.Workers
             _activeGrid = dgv;
             var hit = dgv.HitTest(e.X, e.Y);
 
-            _rowIndex = hit.RowIndex;            
+            _rowIndex = hit.RowIndex;
         }
 
         //Loads existing task to the program on startup
@@ -95,7 +106,7 @@ namespace Tasks.Workers
             //_contextMenu2.ItemClicked += ToolStripMenu2_ItemClicked;
             Dictionary<string, List<Tasky>> loadInfo = new Dictionary<string, List<Tasky>>();
 
-            for ( int i = 0; i < files.Count; i++ )
+            for (int i = 0; i < files.Count; i++)
             {
                 List<Tasky> taskyies = new List<Tasky>();
 
@@ -109,7 +120,7 @@ namespace Tasks.Workers
 
                 //Load subtask to grid from path
                 var lines = File.ReadAllLines(files[i].FullName);
-                foreach ( var line in lines )
+                foreach (var line in lines)
                 {
                     var rowInfo = line.Split(';');
 
@@ -127,7 +138,7 @@ namespace Tasks.Workers
                     //grid.Rows[rowIndex].Cells[2].Value = new DataGridViewComboBoxCell().Value = restoreTasky.Status == true ? "In progres" : "Done";
                     #endregion
 
-                    if ( Convert.ToBoolean(restoreTasky.Status) )
+                    if (Convert.ToBoolean(restoreTasky.Status))
                     {
                         grid.Rows.Add(row);
                     }
@@ -144,8 +155,8 @@ namespace Tasks.Workers
                 }
 
                 grid.ClearSelection();
-                
-                if ( loadInfo.Keys.Contains(tabPageName) == false )
+
+                if (loadInfo.Keys.Contains(tabPageName) == false)
                 {
                     loadInfo.Add(tabPageName, taskyies);
                 }
@@ -164,7 +175,11 @@ namespace Tasks.Workers
             {
                 case "toolStripMenuItem1":
                     {
-                        hittedRow.DefaultCellStyle.BackColor = Color.Red;
+                        //Save default foreground color
+                        rowsForeGroundColor = hittedRow.DefaultCellStyle.ForeColor;
+
+                        hittedRow.DefaultCellStyle.BackColor = (Color)Settings.Default["ThemeColor"];
+                        hittedRow.DefaultCellStyle.ForeColor = Color.White;
                         _activeGrid.ClearSelection();
                     }
                     break;
@@ -172,9 +187,11 @@ namespace Tasks.Workers
                 case "toolStripMenuItem2":
                     {
                         hittedRow.DefaultCellStyle.BackColor = Color.White;
+                        hittedRow.DefaultCellStyle.ForeColor = rowsForeGroundColor;
                         _activeGrid.ClearSelection();
                     }
                     break;
+
                 case "toolStripMenuItem3":
                     {
                         // Delete from grid
@@ -205,10 +222,11 @@ namespace Tasks.Workers
 
                         grid.Update();
                         grid.ClearSelection();
+                    }
+                    break;
 
-                        
-
-                        //UpdateLabels(dgvDoneTasks, (TabControl)_activeGrid.Parent.Parent, lblRemaining, lblCompleted);
+                case "setDoneToolStripMenuItem":
+                    {
                     }
                     break;
                 default:
@@ -240,7 +258,7 @@ namespace Tasks.Workers
             var statusIndxColumn = grid.Columns.Add("status", "Status");
             grid.Columns[statusIndxColumn].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             grid.Columns[statusIndxColumn].Visible = false;
-            
+
             grid.ColumnHeadersHeight = 35;
             grid.Dock = DockStyle.Fill;
             grid.AllowUserToAddRows = false;
@@ -269,7 +287,7 @@ namespace Tasks.Workers
             var pathToTask = @"C:\Tasky" + @"\" + tab.Text + ".txt";
             var grid = GetActiveGrid(tabControl);
 
-            using ( SubTask subTask = new SubTask() )
+            using (SubTask subTask = new SubTask())
             {
                 Workers.Tasky newTasky;
 
@@ -277,12 +295,15 @@ namespace Tasks.Workers
                 subTask.CancelButton = subTask.btnCancel;
                 subTask.AcceptButton = subTask.btnOK;
 
+                subTask.btnCancel.BackColor = (Color)Settings.Default["ThemeColor"];
+                subTask.btnOK.BackColor = (Color)Settings.Default["ThemeColor"];
+
                 DialogResult result = subTask.ShowDialog();
 
                 //Get task object from dialog
                 newTasky = subTask.Tasky;
 
-                if ( newTasky != null )
+                if (newTasky != null)
                 {
                     newTasky.Status = true; /*default value*/
 
@@ -291,12 +312,12 @@ namespace Tasks.Workers
                     int rowIndex = grid.Rows.Add(row);
 
                     grid.Rows[rowIndex].Cells[0].Value = newTasky.SubTaskName;
-                    grid.Rows[rowIndex].Cells[1].Value =  String.IsNullOrEmpty(newTasky.Priority) ? "Low" : newTasky.Priority;
-                    grid.Rows[rowIndex].Cells[2].Value =  newTasky.Status ;
+                    grid.Rows[rowIndex].Cells[1].Value = String.IsNullOrEmpty(newTasky.Priority) ? "Low" : newTasky.Priority;
+                    grid.Rows[rowIndex].Cells[2].Value = newTasky.Status;
 
                     //Save to file
                     var taskyRecord = newTasky.ToString();
-                    using ( TextWriter tw = new StreamWriter(pathToTask, true) )
+                    using (TextWriter tw = new StreamWriter(pathToTask, true))
                     {
                         tw.WriteLine(taskyRecord);
                     }
@@ -308,7 +329,7 @@ namespace Tasks.Workers
         public DataGridView GetActiveGrid(TabControl tabControl)
         {
             var tab = tabControl.SelectedTab;
-            DataGridView grid = (DataGridView) tab.Controls[0];
+            DataGridView grid = (DataGridView)tab.Controls[0];
 
             return grid;
         }
@@ -334,9 +355,9 @@ namespace Tasks.Workers
             grid.ClearSelection();
             //Remove subtask from file
             int indexToDelete;
-            for ( int i = 0; i < lines.Count; i++ )
+            for (int i = 0; i < lines.Count; i++)
             {
-                if ( lines[i].Contains(search) )
+                if (lines[i].Contains(search))
                 {
                     indexToDelete = i;
                     lines.RemoveAt(indexToDelete);
@@ -372,14 +393,14 @@ namespace Tasks.Workers
                 UpdateSubTaskToFile(row, pathToTask);
 
                 //Update state of onLoadInfo Dictionary
-                foreach ( var key in loadInfo.Keys )
+                foreach (var key in loadInfo.Keys)
                 {
-                    if ( tab.Text == key )
+                    if (tab.Text == key)
                     {
                         List<Tasky> subtasks = loadInfo[key];
-                        foreach ( Tasky subTask in subtasks )
+                        foreach (Tasky subTask in subtasks)
                         {
-                            if ( subTask.SubTaskName == row.Cells[0].Value.ToString() )
+                            if (subTask.SubTaskName == row.Cells[0].Value.ToString())
                             {
                                 subTask.Status = false;
                             }
@@ -387,7 +408,7 @@ namespace Tasks.Workers
                     }
                 }
             }
-            catch ( Exception )
+            catch (Exception)
             {
 
                 //throw;
@@ -410,9 +431,9 @@ namespace Tasks.Workers
             string updateState = String.Join(";", rowData);
 
             int indexToUpdate;
-            for ( int i = 0; i < lines.Count; i++ )
+            for (int i = 0; i < lines.Count; i++)
             {
-                if ( lines[i].Contains(search) )
+                if (lines[i].Contains(search))
                 {
                     indexToUpdate = i;
                     lines.RemoveAt(indexToUpdate);
@@ -429,15 +450,15 @@ namespace Tasks.Workers
             try
             {
                 completed.Rows.Clear();
-                foreach ( string key in onLoadInfo.Keys )
+                foreach (string key in onLoadInfo.Keys)
                 {
-                    if ( key == tab.Text )
+                    if (key == tab.Text)
                     {
                         List<Tasky> tasks = onLoadInfo[key];
 
                         var convertedToRows = ConvertTaskysToRowData(tasks);
 
-                        foreach ( var row in convertedToRows )
+                        foreach (var row in convertedToRows)
                         {
                             completed.Rows.Add(row);
                         }
@@ -445,7 +466,7 @@ namespace Tasks.Workers
                 }
 
             }
-            catch ( Exception )
+            catch (Exception)
             {
 
             }
@@ -455,9 +476,9 @@ namespace Tasks.Workers
         {
             List<string[]> converted = new List<string[]>();
 
-            foreach ( Tasky subTasky in tasks )
+            foreach (Tasky subTasky in tasks)
             {
-                if ( subTasky.Status == false )
+                if (subTasky.Status == false)
                 {
                     converted.Add(subTasky.ToString().Split(';'));
                 }
@@ -473,7 +494,7 @@ namespace Tasks.Workers
                 done.Text = completed.Rows.Count.ToString();
                 remaining.Text = GetActiveGrid(tabControl).Rows.Count.ToString();
             }
-            catch ( Exception )
+            catch (Exception)
             {
 
                 //throw;
@@ -483,7 +504,7 @@ namespace Tasks.Workers
         public void ClearDGVCompleted(TabControl tabControl, DataGridView completed)
         {
             var grid = GetActiveGrid(tabControl);
-            if ( grid.Rows.Count == 0 )
+            if (grid.Rows.Count == 0)
             {
                 completed.Rows.Clear();
             }

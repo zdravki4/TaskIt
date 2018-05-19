@@ -13,7 +13,7 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if ( disposing && ( components != null ) )
+            if (disposing && (components != null))
             {
                 components.Dispose();
             }
@@ -53,13 +53,19 @@
             this.deleteTaskCtrlDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.label3 = new System.Windows.Forms.Label();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblLogo = new System.Windows.Forms.Label();
             this.btnClearHistory = new System.Windows.Forms.Button();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.setDoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.lblOngoingTasks = new System.Windows.Forms.Label();
+            this.lblOngoingTasksTotal = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDoneTasks)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -71,12 +77,14 @@
             this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Location = new System.Drawing.Point(16, 52);
+            this.tabControl.Location = new System.Drawing.Point(16, 70);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(777, 238);
+            this.tabControl.Size = new System.Drawing.Size(777, 245);
             this.tabControl.TabIndex = 0;
+            this.tabControl.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.tabControl_ControlAdded);
+            this.tabControl.ControlRemoved += new System.Windows.Forms.ControlEventHandler(this.tabControl_ControlRemoved);
             // 
             // btnNewTask
             // 
@@ -85,7 +93,7 @@
             this.btnNewTask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNewTask.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnNewTask.ForeColor = System.Drawing.Color.White;
-            this.btnNewTask.Location = new System.Drawing.Point(16, 338);
+            this.btnNewTask.Location = new System.Drawing.Point(16, 398);
             this.btnNewTask.Margin = new System.Windows.Forms.Padding(4);
             this.btnNewTask.Name = "btnNewTask";
             this.btnNewTask.Padding = new System.Windows.Forms.Padding(1);
@@ -102,7 +110,7 @@
             this.btnDeleteTask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDeleteTask.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnDeleteTask.ForeColor = System.Drawing.Color.White;
-            this.btnDeleteTask.Location = new System.Drawing.Point(232, 338);
+            this.btnDeleteTask.Location = new System.Drawing.Point(232, 398);
             this.btnDeleteTask.Margin = new System.Windows.Forms.Padding(4);
             this.btnDeleteTask.Name = "btnDeleteTask";
             this.btnDeleteTask.Padding = new System.Windows.Forms.Padding(1);
@@ -155,7 +163,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
-            this.label1.Location = new System.Drawing.Point(12, 393);
+            this.label1.Location = new System.Drawing.Point(12, 453);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(118, 20);
@@ -169,7 +177,7 @@
             this.btnSetDone.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetDone.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold);
             this.btnSetDone.ForeColor = System.Drawing.Color.White;
-            this.btnSetDone.Location = new System.Drawing.Point(124, 338);
+            this.btnSetDone.Location = new System.Drawing.Point(124, 398);
             this.btnSetDone.Margin = new System.Windows.Forms.Padding(4);
             this.btnSetDone.Name = "btnSetDone";
             this.btnSetDone.Size = new System.Drawing.Size(100, 41);
@@ -189,11 +197,11 @@
             this.Column1,
             this.Priority,
             this.Status});
-            this.dgvDoneTasks.Location = new System.Drawing.Point(16, 421);
+            this.dgvDoneTasks.Location = new System.Drawing.Point(16, 481);
             this.dgvDoneTasks.Margin = new System.Windows.Forms.Padding(4);
             this.dgvDoneTasks.Name = "dgvDoneTasks";
             this.dgvDoneTasks.RowHeadersVisible = false;
-            this.dgvDoneTasks.Size = new System.Drawing.Size(777, 166);
+            this.dgvDoneTasks.Size = new System.Drawing.Size(777, 114);
             this.dgvDoneTasks.TabIndex = 6;
             // 
             // Column1
@@ -221,12 +229,12 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
-            this.label2.Location = new System.Drawing.Point(12, 300);
+            this.label2.Location = new System.Drawing.Point(12, 360);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(117, 20);
+            this.label2.Size = new System.Drawing.Size(207, 20);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Remaining:";
+            this.label2.Text = "Remaining subtasks:";
             // 
             // lblRemaining
             // 
@@ -234,7 +242,7 @@
             this.lblRemaining.AutoSize = true;
             this.lblRemaining.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblRemaining.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
-            this.lblRemaining.Location = new System.Drawing.Point(129, 300);
+            this.lblRemaining.Location = new System.Drawing.Point(228, 360);
             this.lblRemaining.Name = "lblRemaining";
             this.lblRemaining.Size = new System.Drawing.Size(0, 20);
             this.lblRemaining.TabIndex = 8;
@@ -245,7 +253,7 @@
             this.lblCompleted.AutoSize = true;
             this.lblCompleted.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblCompleted.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
-            this.lblCompleted.Location = new System.Drawing.Point(129, 393);
+            this.lblCompleted.Location = new System.Drawing.Point(129, 453);
             this.lblCompleted.Name = "lblCompleted";
             this.lblCompleted.Size = new System.Drawing.Size(0, 20);
             this.lblCompleted.TabIndex = 9;
@@ -294,7 +302,8 @@
             this.menuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 4, 0, 4);
@@ -303,21 +312,36 @@
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
-            // label3
+            // optionsToolStripMenuItem
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.colorThemeToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // colorThemeToolStripMenuItem
+            // 
+            this.colorThemeToolStripMenuItem.Name = "colorThemeToolStripMenuItem";
+            this.colorThemeToolStripMenuItem.Size = new System.Drawing.Size(192, 26);
+            this.colorThemeToolStripMenuItem.Text = "Color Theme";
+            this.colorThemeToolStripMenuItem.Click += new System.EventHandler(this.colorThemeToolStripMenuItem_Click);
+            // 
+            // lblLogo
+            // 
+            this.lblLogo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(747, 6);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 18);
-            this.label3.TabIndex = 10;
-            this.label3.Text = " ZGDS";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.lblLogo.AutoSize = true;
+            this.lblLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
+            this.lblLogo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblLogo.ForeColor = System.Drawing.Color.White;
+            this.lblLogo.Location = new System.Drawing.Point(747, 6);
+            this.lblLogo.Name = "lblLogo";
+            this.lblLogo.Size = new System.Drawing.Size(54, 18);
+            this.lblLogo.TabIndex = 10;
+            this.lblLogo.Text = " ZGDS";
+            this.lblLogo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblLogo.Click += new System.EventHandler(this.label3_Click);
             // 
             // btnClearHistory
             // 
@@ -326,7 +350,7 @@
             this.btnClearHistory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClearHistory.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnClearHistory.ForeColor = System.Drawing.Color.White;
-            this.btnClearHistory.Location = new System.Drawing.Point(645, 338);
+            this.btnClearHistory.Location = new System.Drawing.Point(645, 398);
             this.btnClearHistory.Margin = new System.Windows.Forms.Padding(4);
             this.btnClearHistory.Name = "btnClearHistory";
             this.btnClearHistory.Padding = new System.Windows.Forms.Padding(1);
@@ -343,43 +367,76 @@
             this.toolStripMenuItem1,
             this.toolStripMenuItem2,
             this.toolStripSeparator3,
+            this.setDoneToolStripMenuItem,
             this.toolStripMenuItem3});
             this.contextMenuStrip2.Name = "contextMenuStrip2";
-            this.contextMenuStrip2.Size = new System.Drawing.Size(211, 110);
+            this.contextMenuStrip2.Size = new System.Drawing.Size(182, 134);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(181, 24);
             this.toolStripMenuItem1.Text = "Mark as Current";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(181, 24);
             this.toolStripMenuItem2.Text = "Unmark";
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
-            this.toolStripMenuItem3.Text = "Delete Subtask";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(207, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(178, 6);
+            // 
+            // setDoneToolStripMenuItem
+            // 
+            this.setDoneToolStripMenuItem.Name = "setDoneToolStripMenuItem";
+            this.setDoneToolStripMenuItem.Size = new System.Drawing.Size(181, 24);
+            this.setDoneToolStripMenuItem.Text = "Set done";
+            this.setDoneToolStripMenuItem.Click += new System.EventHandler(this.setDoneToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(181, 24);
+            this.toolStripMenuItem3.Text = "Delete Subtask";
+            // 
+            // lblOngoingTasks
+            // 
+            this.lblOngoingTasks.AutoSize = true;
+            this.lblOngoingTasks.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOngoingTasks.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
+            this.lblOngoingTasks.Location = new System.Drawing.Point(12, 42);
+            this.lblOngoingTasks.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOngoingTasks.Name = "lblOngoingTasks";
+            this.lblOngoingTasks.Size = new System.Drawing.Size(152, 20);
+            this.lblOngoingTasks.TabIndex = 7;
+            this.lblOngoingTasks.Text = "Ongoing tasks:";
+            // 
+            // lblOngoingTasksTotal
+            // 
+            this.lblOngoingTasksTotal.AutoSize = true;
+            this.lblOngoingTasksTotal.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOngoingTasksTotal.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(173)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
+            this.lblOngoingTasksTotal.Location = new System.Drawing.Point(162, 42);
+            this.lblOngoingTasksTotal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOngoingTasksTotal.Name = "lblOngoingTasksTotal";
+            this.lblOngoingTasksTotal.Size = new System.Drawing.Size(0, 20);
+            this.lblOngoingTasksTotal.TabIndex = 7;
             // 
             // TasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(809, 601);
+            this.ClientSize = new System.Drawing.Size(809, 608);
             this.Controls.Add(this.btnClearHistory);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblLogo);
             this.Controls.Add(this.lblCompleted);
             this.Controls.Add(this.lblRemaining);
+            this.Controls.Add(this.lblOngoingTasksTotal);
+            this.Controls.Add(this.lblOngoingTasks);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dgvDoneTasks);
             this.Controls.Add(this.btnSetDone);
@@ -431,7 +488,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem deleteAllToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblLogo;
         private System.Windows.Forms.ToolStripMenuItem deleteTaskCtrlDToolStripMenuItem;
         private System.Windows.Forms.Button btnClearHistory;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
@@ -439,6 +496,12 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem colorThemeToolStripMenuItem;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Label lblOngoingTasks;
+        private System.Windows.Forms.Label lblOngoingTasksTotal;
+        private System.Windows.Forms.ToolStripMenuItem setDoneToolStripMenuItem;
     }
 }
 

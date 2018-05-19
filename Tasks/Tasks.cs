@@ -34,20 +34,36 @@ namespace Tasks
         string lastActivTabOnClose = string.Empty;
 
         int _rightClickedRow;
-        #endregion 
+        #endregion
+
+        #region Visual
+        List<Control> uiControls = new List<Control>();
+        List<Label> lblsColor = new List<Label>();
+
+        static int _onGoingTasks = 0;
+
+        #endregion
 
         public TasksForm()
         {
             InitializeComponent();
 
+            #region UI controls dynamic
+            List<Control> controlsDynBackColor = new List<Control>() { menuStrip1, lblLogo, btnNewTask, btnDeleteTask, btnSetDone, btnClearHistory };
+            uiControls.AddRange(controlsDynBackColor);
+
+            List<Label> btnsDynColor = new List<Label>() { label1, label2, lblCompleted, lblRemaining, lblOngoingTasks, lblOngoingTasksTotal };
+            lblsColor.AddRange(btnsDynColor);
+            #endregion
+
             this.MinimumSize = new Size(650, 450);
-            
+
             //Hooks a menu strip to Tab Control
             this.tabControl.MouseClick += new MouseEventHandler(tabControl_MouseClick);
             tabControl.Font = new Font("Verdana", 11);
 
             this.menuStrip1.ForeColor = Color.FromArgb(255, 255, 255);
-            taskManager = new TaskManager(this.contextMenuStrip2);
+            taskManager = new TaskManager(this.contextMenuStrip2, ref onLoadInfo, dgvDoneTasks);
 
             //Main storage path
             #region Get files or Create directory
@@ -65,21 +81,7 @@ namespace Tasks
             #endregion
 
             #region Get LastTab on close
-            if (!Directory.Exists(_PathLastTab))
-            {
-                //Create folder that will hold info about last active tab
-                Directory.CreateDirectory(_PathLastTab);
-
-                var f = File.Create(_PathLastTab + @"\lastActiveTab.txt");
-                f.Close();
-                lastActivTabOnClose = string.Empty;
-            }
-            else
-            {
-                var lastTab = Directory.GetFiles(_PathLastTab);
-                var data = File.ReadAllLines(lastTab[0]);
-                lastActivTabOnClose = data[0];
-            }
+            lastActivTabOnClose = (string)Settings.Default["LastActiveTabPageName"];
             #endregion
 
             #region Loading tasks to tabControl
@@ -95,9 +97,35 @@ namespace Tasks
             {
                 tabControl.TabPages.Clear();
             }
+
+            //Restoring active tasks
+            var activeTasksCodeString = (string)Settings.Default["CurrentTasks"];
+            SetActiveTabs(activeTasksCodeString, this.tabControl);
+
+            //MessageBox.Show($"{activeTasksCodeString}");
+
             #endregion
         }
-       
+
+        private void SetActiveTabs(string code, Control tabControl)
+        {
+            var backColorActive = (Color)Settings.Default["ThemeColor"];
+            var projs = code.Split(';').TakeWhile(p => String.IsNullOrEmpty(p) == false).ToList();
+            var pages = tabControl.Controls.OfType<TabPage>().ToList();
+
+            foreach (var proj in projs)
+            {
+                var pageName = proj.Substring(0, proj.IndexOf('#'));
+                var rowIdxs = proj.Substring(proj.IndexOf('#') + 1).Split(',').TakeWhile(p => String.IsNullOrEmpty(p) == false).ToList();
+
+                var rows = pages.Where(n => n.Text.Equals(pageName)).First().Controls.OfType<DataGridView>().First().Rows;
+                for (int i = 0; i < rowIdxs.Count; i++)
+                {
+                    rows[Convert.ToInt16(rowIdxs[i])].DefaultCellStyle.BackColor = backColorActive;
+                }
+            }
+        }
+
         private void TabControl_Selected(object sender, TabControlEventArgs e)
         {
             TabPage currentPage = e.TabPage;
@@ -213,13 +241,22 @@ namespace Tasks
 
             //taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
 
-            
+
         }
 
         private void TasksForm_Shown(object sender, EventArgs e)
         {
             try
             {
+                #region Theme color
+                var themeColor = (Color)Settings.Default["ThemeColor"];
+                uiControls.ForEach(c => c.BackColor = themeColor);
+                lblsColor.ForEach(l => l.ForeColor = themeColor);
+                #endregion
+
+                _onGoingTasks = tabControl.Controls.OfType<TabPage>().Count();
+                lblOngoingTasksTotal.Text = _onGoingTasks.ToString();
+
                 //Set selected index to open the same tab page, which was active on form closing
                 tabControl.SelectedIndex = (int)Settings.Default["LastActiveTabPageIndex"];
                 var tab = this.tabControl.SelectedTab.Text;
@@ -235,6 +272,8 @@ namespace Tasks
                 }
 
                 taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
+
+
             }
             catch (Exception)
             {
@@ -255,9 +294,14 @@ namespace Tasks
 
         private void TasksForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            #region Saving application settings and status
+
+            Settings.Default["CurrentTasks"] = GetActiveTasksAsString();
             Settings.Default["LastActiveTabPageIndex"] = this.tabControl.SelectedIndex;
+            Settings.Default["LastActiveTabPageName"] = this.tabControl.SelectedTab.Name;
             Settings.Default.Save();
 
+            #endregion
         }
 
         //Shortcuts 
@@ -347,7 +391,63 @@ namespace Tasks
                 ((AuthorInfo)sender).Close();
             }
 
-    
+
+        }
+
+        private void colorThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var result = colorDialog1.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                var newThemeColor = colorDialog1.Color;
+                Settings.Default["ThemeColor"] = newThemeColor;
+                Settings.Default.Save();
+
+                uiControls.ForEach(c => c.BackColor = newThemeColor);
+                lblsColor.ForEach(l => l.ForeColor = newThemeColor);
+
+            }
+        }
+
+        private void tabControl_ControlAdded(object sender, ControlEventArgs e)
+        {
+            _onGoingTasks += 1;
+            lblOngoingTasksTotal.Text = _onGoingTasks.ToString();
+
+        }
+
+        private void tabControl_ControlRemoved(object sender, ControlEventArgs e)
+        {
+            _onGoingTasks -= 1;
+            lblOngoingTasksTotal.Text = _onGoingTasks.ToString();
+        }
+
+        private string GetActiveTasksAsString()
+        {
+            StringBuilder info = new StringBuilder();
+            var pages = tabControl.Controls.OfType<TabPage>().ToList();
+            for (int i = 0; i < pages.Count; i++)
+            {
+                var page = pages[i];
+                info.Append(page.Text + "#");
+                var rows = page.Controls.OfType<DataGridView>().First().Rows;
+                var markedRows = rows.Cast<DataGridViewRow>().Where(r => r.DefaultCellStyle.BackColor == (Color)Settings.Default["ThemeColor"]).ToList();
+                for (int j = 0; j <= markedRows.Count - 1; j++)
+                {
+                    info.Append(markedRows[j].Index.ToString() + ",");
+                }
+
+                info.Append(";");
+            }
+
+            return info.ToString();
+        }
+
+        private void setDoneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            taskManager.SetTaskyDone(tabControl, dgvDoneTasks, ref onLoadInfo);
+            taskManager.UpdateLabels(dgvDoneTasks, tabControl, lblRemaining, lblCompleted);
         }
     }
 }
