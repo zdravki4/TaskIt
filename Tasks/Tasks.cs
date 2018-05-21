@@ -122,6 +122,8 @@ namespace Tasks
                 for (int i = 0; i < rowIdxs.Count; i++)
                 {
                     rows[Convert.ToInt16(rowIdxs[i])].DefaultCellStyle.BackColor = backColorActive;
+                    rows[Convert.ToInt16(rowIdxs[i])].DefaultCellStyle.ForeColor = Color.White;
+
                 }
             }
         }
